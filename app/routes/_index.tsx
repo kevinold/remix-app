@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -7,9 +8,19 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export async function loader() {
+  const resp =  await fetch('https://jsonplaceholder.typicode.com/todos/1')
+  
+  const data = await resp.json()
+
+  return data
+}
+
 export default function Index() {
+  const todo = useLoaderData<typeof loader>()
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
+      <div>Todo: { todo.title }</div>
       <h1>Welcome to Remix</h1>
       <ul>
         <li>
